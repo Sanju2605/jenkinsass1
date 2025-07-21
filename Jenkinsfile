@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        // Assuming you installed .NET SDK in Jenkins
-        dotnet 'dotnet6' // Or whatever name you configured in Jenkins global tool settings
+        maven 'maven3' // Make sure 'maven3' is installed in Jenkins Global Tool Config
+        // dotnet 'dotnet6' ❌ Remove or comment this line
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
                 git 'https://github.com/Sanju2605/jenkinsass1.git'
             }
@@ -15,17 +15,13 @@ pipeline {
 
         stage('Restore Dependencies') {
             steps {
-                dir('src') {
-                    bat 'dotnet restore'
-                }
+                bat 'dotnet restore EmployeeApp.csproj'
             }
         }
 
-        stage('Build Solution') {
+        stage('Build') {
             steps {
-                dir('src') {
-                    bat 'dotnet build --configuration Release'
-                }
+                bat 'dotnet build EmployeeApp.csproj --configuration Release'
             }
         }
 
