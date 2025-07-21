@@ -2,22 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Database Migrate') {
+        stage('Clone Repository') {
             steps {
-                bat 'cd database && rh.exe --s localhost --d EmployeeDB --u sa --p YourStrong!Passw0rd --f .'
+                git branch: 'master', url: 'https://github.com/Sanju2605/jenkinsass1.git'
             }
         }
 
-        stage('Build .NET App') {
+        stage('Build .NET Project') {
             steps {
-                bat 'dotnet build src/EmployeeApp/EmployeeApp.csproj'
+                dir('src') {
+                    bat 'dotnet build'
+                }
             }
         }
 
-        stage('Run App') {
+        stage('Apply DB Migrations') {
             steps {
-                bat 'dotnet run --project src/EmployeeApp/EmployeeApp.csproj'
+                bat 'cd database && rh.exe --s localhost --d EmployeeDB --u sa --p YourStrong!Passw0rd --a SQL --f .'
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline completed successfully.'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check console logs for errors.'
         }
     }
 }
