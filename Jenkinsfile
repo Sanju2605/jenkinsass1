@@ -27,7 +27,7 @@ pipeline {
 
         stage('Apply DB Migrations') {
             steps {
-                bat 'cd database && rh.exe --connectionstring "Server=localhost;Database=EmployeeDB;User Id=sa;Password=YourStrong!Passw0rd;" --a SQL --f .'
+                bat 'cd database && rh.exe --connectionstring "Server=localhost;Database=EmployeeDB;User Id=sa;Password=YourStrong!Passw0rd;" --a SQL --f . --warnOnOneTimeScriptChanges'
              }
         }
     }
