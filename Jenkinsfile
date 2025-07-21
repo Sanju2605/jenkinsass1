@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.3' // Make sure 'maven3' is installed in Jenkins Global Tool Config
-        // dotnet 'dotnet6' ❌ Remove or comment this line
+        maven 'Maven 3.3' 
     }
 
     stages {
