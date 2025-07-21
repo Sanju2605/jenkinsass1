@@ -1,17 +1,30 @@
 pipeline {
     agent any
 
+    tools {
+        // Assuming you installed .NET SDK in Jenkins
+        dotnet 'dotnet6' // Or whatever name you configured in Jenkins global tool settings
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'master', url: 'https://github.com/Sanju2605/jenkinsass1.git'
+                git 'https://github.com/Sanju2605/jenkinsass1.git'
             }
         }
 
-        stage('Build .NET Project') {
+        stage('Restore Dependencies') {
             steps {
                 dir('src') {
-                    bat 'dotnet build'
+                    bat 'dotnet restore'
+                }
+            }
+        }
+
+        stage('Build Solution') {
+            steps {
+                dir('src') {
+                    bat 'dotnet build --configuration Release'
                 }
             }
         }
@@ -20,15 +33,6 @@ pipeline {
             steps {
                 bat 'cd database && rh.exe --s localhost --d EmployeeDB --u sa --p YourStrong!Passw0rd --a SQL --f .'
             }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Pipeline completed successfully.'
-        }
-        failure {
-            echo '❌ Pipeline failed. Check console logs for errors.'
         }
     }
 }
